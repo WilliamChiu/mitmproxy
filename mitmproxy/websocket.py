@@ -49,6 +49,8 @@ class WebSocketMessage(serializable.Serializable):
     """True if the message has not been forwarded by mitmproxy, False otherwise."""
     injected: bool
     """True if the message was injected and did not originate from a client/server, False otherwise"""
+    code: int
+    """Code to use upon closing the websocket connection"""
 
     def __init__(
         self,
@@ -58,6 +60,7 @@ class WebSocketMessage(serializable.Serializable):
         timestamp: float | None = None,
         dropped: bool = False,
         injected: bool = False,
+        code: Optional[int] = None,
     ) -> None:
         self.from_client = from_client
         self.type = Opcode(type)
@@ -65,6 +68,7 @@ class WebSocketMessage(serializable.Serializable):
         self.timestamp: float = timestamp or time.time()
         self.dropped = dropped
         self.injected = injected
+        self.code = code
 
     @classmethod
     def from_state(cls, state: WebSocketMessageState):
@@ -88,6 +92,7 @@ class WebSocketMessage(serializable.Serializable):
             self.timestamp,
             self.dropped,
             self.injected,
+            self.code
         ) = state
         self.type = Opcode(typ)
 

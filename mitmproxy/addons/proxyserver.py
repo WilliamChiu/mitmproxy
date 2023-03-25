@@ -297,13 +297,23 @@ class Proxyserver(ServerManager):
 
     @command.command("inject.websocket")
     def inject_websocket(
-        self, flow: Flow, to_client: bool, message: bytes, is_text: bool = True
+        self, flow: Flow, to_client: bool, message: bytes, is_text: bool = True, close_connection: bool = False, code = None
     ):
         if not isinstance(flow, http.HTTPFlow) or not flow.websocket:
             logger.warning("Cannot inject WebSocket messages into non-WebSocket flows.")
 
+        if is_text:
+            ws_msg_type = Opcode.TEXT
+        elif close_connection:
+            ws_msg_type = Opcode.CLOSE
+        else:
+            ws_msg_type = Opcode.BINARY
+
         msg = websocket.WebSocketMessage(
-            Opcode.TEXT if is_text else Opcode.BINARY, not to_client, message
+             ws_msg_type,
+             not to_client,
+             message,
+             code=code
         )
         event = WebSocketMessageInjected(flow, msg)
         try:
