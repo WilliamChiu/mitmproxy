@@ -36,10 +36,10 @@ class BlockRequest:
             if ctx.options.code is not None:
                 self.code = ctx.options.code
 
-    def request(self, flow):
+    def response(self, flow):
         if self.flow_expr(flow):
             flow.response = http.Response.make(
-                self.code,
+                self.code, headers=flow.response.headers
             )
 
 
