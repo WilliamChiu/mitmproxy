@@ -23,8 +23,8 @@ class BlockRequest:
         )
         loader.add_option(
             name="code",
-            typespec=int,
-            default="",
+            typespec=int | None,
+            default=None,
             help='Code to close the connection with',
         )
 

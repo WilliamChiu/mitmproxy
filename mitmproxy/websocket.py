@@ -60,7 +60,7 @@ class WebSocketMessage(serializable.Serializable):
         timestamp: float | None = None,
         dropped: bool = False,
         injected: bool = False,
-        code: Optional[int] = None,
+        code: int | None = None,
     ) -> None:
         self.from_client = from_client
         self.type = Opcode(type)
